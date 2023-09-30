@@ -3,6 +3,7 @@ package com.mlpj.simple.banking.system;
 import com.mlpj.simple.banking.system.exception.InsufficientBalanceException;
 import com.mlpj.simple.banking.system.exception.OlderTransactionDateException;
 import com.mlpj.simple.banking.system.model.TransactionItem;
+import com.mlpj.simple.banking.system.service.InterestService;
 import com.mlpj.simple.banking.system.service.StatementService;
 import com.mlpj.simple.banking.system.service.TransactionsService;
 import com.mlpj.simple.banking.system.util.Constants;
@@ -18,6 +19,7 @@ public class SimpleBankingSystemApplication {
 
     private static TransactionsService transactionsService = new TransactionsService();
     private static StatementService statementService = new StatementService();
+    private static InterestService interestService = new InterestService();
 
     public static void main(String[] args) {
         while (true) {
@@ -49,7 +51,10 @@ public class SimpleBankingSystemApplication {
                 displayOutput(INVALID_INPUT);
             }
         } else if (initialPromptInput.equalsIgnoreCase("I")) {
-            // todo
+            String interestInput = makeUserPrompt(INPUT_INTEREST_RULE_PROMPT);
+            interestService.processInterestDefinition(interestInput);
+            String interestListStatement = interestService.getInterestListStatement();
+            displayOutput(interestListStatement);
         } else if (initialPromptInput.equalsIgnoreCase("P")) {
             // todo
         } else if (initialPromptInput.equalsIgnoreCase("Q")) {

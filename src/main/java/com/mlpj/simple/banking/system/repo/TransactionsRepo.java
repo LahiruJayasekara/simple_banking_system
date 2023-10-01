@@ -50,7 +50,7 @@ public class TransactionsRepo {
         return groupedByDate.values().stream()
                 .map(transactionItems -> {
                     TransactionItem firstTransactionItem = transactionItems.get(0);
-                    TransactionItem lastTransactionItem = transactionItems.get(transactionItems.size() - 1);
+                    TransactionItem lastTransactionItem = transactionItems.get(transactionItems.size() - 1).clone();
                     double aggregatedTransactionAmount = (firstTransactionItem.getTransactionType().equals(TransactionItem.TransactionType.D)
                             ? firstTransactionItem.getAmount() : -1 * firstTransactionItem.getAmount())
                             + lastTransactionItem.getBalance() - firstTransactionItem.getBalance();

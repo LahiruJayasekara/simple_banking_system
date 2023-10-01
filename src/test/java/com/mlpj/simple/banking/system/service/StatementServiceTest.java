@@ -81,7 +81,7 @@ class StatementServiceTest {
                 "| Date     | Txn Id      | Type |    Amount   |   Balance   |" + System.lineSeparator() +
                 "| 20230601 | 20230601-01 | D    |      150.00 |      250.00 |" + System.lineSeparator() +
                 "| 20230626 | 20230626-01 | W    |       20.00 |      230.00 |" + System.lineSeparator() +
-                "| 20230626 | 20230626-02 | W    |      120.00 |      130.00 |" + System.lineSeparator() +
+                "| 20230626 | 20230626-02 | W    |      100.00 |      130.00 |" + System.lineSeparator() +
                 "| 20230630 |             | I    |        0.39 |      130.39 |" + System.lineSeparator();
 
         Assertions.assertEquals(expectedStatement.trim(), statement.trim());

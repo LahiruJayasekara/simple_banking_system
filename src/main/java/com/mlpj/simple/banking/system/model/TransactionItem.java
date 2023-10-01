@@ -73,4 +73,8 @@ public class TransactionItem {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
+    public TransactionItem clone() {
+        return new TransactionItem(transactionID, date, accountName, transactionType, amount, balance);
+    }
 }

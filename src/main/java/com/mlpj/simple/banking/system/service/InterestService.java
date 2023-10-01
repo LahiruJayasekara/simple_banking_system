@@ -57,6 +57,10 @@ public class InterestService {
 
         List<TransactionItem> transactionListForMonth = getTransactionItemListForMonth(accName, date, yearMonth);
 
+        if (transactionListForMonth == null) {
+            return null;
+        }
+
         List<InterestItem> interestItemsForTheMonth = getInterestItemsForMonth(date, yearMonth);
 
         //adding a reference month end interest
@@ -153,7 +157,7 @@ public class InterestService {
 
         //adding last month interest
         InterestItem lastMonthInterest = interestRepo.getLastMonthInterest(yearMonth);
-        if (!interestItemsForTheMonth.isEmpty() && interestItemsForTheMonth.get(0).getDate().getDayOfMonth() != 1) {
+        if (interestItemsForTheMonth.isEmpty() || interestItemsForTheMonth.get(0).getDate().getDayOfMonth() != 1) {
             lastMonthInterest.setDate(LocalDate.parse(date + "01", DateTimeFormatter.BASIC_ISO_DATE)); //modify date to start of month
             interestItemsForTheMonth.add(0, lastMonthInterest);
         }
@@ -164,6 +168,9 @@ public class InterestService {
         List<TransactionItem> transactionListForMonth = transactionsRepo.getTransactionListForMonthAccumulatedByDate(accName, yearMonth)
                 .stream().collect(Collectors.toList());
 
+        if (transactionListForMonth.isEmpty()) {
+            return null;
+        }
         //adding previous transaction
         if (transactionListForMonth.get(0).getDate().getDayOfMonth() != 1) {
             TransactionItem previousTransactionForTheMonth = transactionsRepo.getPreviousTransactionForTheMonth(accName, yearMonth);

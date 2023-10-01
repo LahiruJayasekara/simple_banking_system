@@ -34,7 +34,9 @@ public class StatementService {
         TransactionItem interestTransaction = interestService.calculateInterestForMonth(accountName, statementRequestInfo[1]);
         List<TransactionItem> transactionsForAccount = new ArrayList<>(transactionsRepo.getTransactionsForMonth(accountName, yearMonth));
 
-        transactionsForAccount.add(interestTransaction);
+        if (interestTransaction != null) {
+            transactionsForAccount.add(interestTransaction);
+        }
         Stream<String> formattedList = transactionsForAccount.stream().map(this::transactionToFormattedStingWithBalance);
         return getFormattedStatement(accountName, formattedList, STATEMENT_HEADERS_WITH_BALANCE);
 

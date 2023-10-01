@@ -9,7 +9,7 @@
 * Prerequisite - Java 17
 1. Goto project root directory
 2. Run `./gradlew build`
-3Run `java -jar .\build\libs\simple_banking_system-1.0-SNAPSHOT-all.jar`
+3. Run `java -jar .\build\libs\simple_banking_system-1.0-SNAPSHOT-all.jar`
 
 ### Test commands
 1. Define interests

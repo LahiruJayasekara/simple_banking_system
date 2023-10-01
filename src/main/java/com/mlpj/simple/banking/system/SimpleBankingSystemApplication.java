@@ -52,13 +52,22 @@ public class SimpleBankingSystemApplication {
             }
         } else if (initialPromptInput.equalsIgnoreCase("I")) {
             String interestInput = makeUserPrompt(INPUT_INTEREST_RULE_PROMPT);
-            interestService.processInterestDefinition(interestInput);
-            String interestListStatement = interestService.getInterestListStatement();
-            displayOutput(interestListStatement);
+            if (validateInputForRegex(interestInput, INPUT_INTEREST_RULE_VALIDATION_REGEX)) {
+                interestService.processInterestDefinition(interestInput);
+                String interestListStatement = interestService.getInterestListStatement();
+                displayOutput(interestListStatement);
+            } else {
+                displayOutput(INVALID_INPUT);
+            }
+
         } else if (initialPromptInput.equalsIgnoreCase("P")) {
             String statementInput = makeUserPrompt(RETRIEVE_PRINT_STATEMENT_PROMPT);
-            String statement = statementService.retrieveStatementForAccount(statementInput);
-            displayOutput(statement);
+            if (validateInputForRegex(statementInput, RETRIEVE_PRINT_STATEMENT_PROMPT_VALIDATION_REGEX)) {
+                String statement = statementService.retrieveStatementForAccount(statementInput);
+                displayOutput(statement);
+            } else {
+                displayOutput(INVALID_INPUT);
+            }
         } else if (initialPromptInput.equalsIgnoreCase("Q")) {
             displayOutput(Constants.THANK_YOU_MESSAGE);
             return false;

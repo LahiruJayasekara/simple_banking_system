@@ -174,8 +174,10 @@ public class InterestService {
         //adding previous transaction
         if (transactionListForMonth.get(0).getDate().getDayOfMonth() != 1) {
             TransactionItem previousTransactionForTheMonth = transactionsRepo.getPreviousTransactionForTheMonth(accName, yearMonth);
-            previousTransactionForTheMonth.setDate(LocalDate.parse(date + "01", DateTimeFormatter.BASIC_ISO_DATE));
-            transactionListForMonth.add(0, previousTransactionForTheMonth);
+            if (previousTransactionForTheMonth != null) {
+                previousTransactionForTheMonth.setDate(LocalDate.parse(date + "01", DateTimeFormatter.BASIC_ISO_DATE));
+                transactionListForMonth.add(0, previousTransactionForTheMonth);
+            }
         }
         return transactionListForMonth;
     }

@@ -1,10 +1,30 @@
 plugins {
     id 'java'
+    id 'application'
     id 'jacoco'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group 'org.mlpj'
 version '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+ext {
+    javaMainClass = 'com.mlpj.simple.banking.system.SimpleBankingSystemApplication'
+}
+
+application {
+    mainClassName = javaMainClass
+}
+
+shadowJar {
+    mainClassName = 'com.mlpj.simple.banking.system.SimpleBankingSystemApplication'
+}
 
 repositories {
     mavenCentral()
@@ -13,7 +33,6 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-//    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.5.0'
 }
 
 test {

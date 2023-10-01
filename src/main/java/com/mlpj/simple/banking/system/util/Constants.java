@@ -5,6 +5,7 @@ public class Constants {
     }
 
     public static final String INITIAL_PROMPT = """
+            
             Welcome to AwesomeGIC Bank! What would you like to do?
             [T] Input transactions
             [I] Define interest rules

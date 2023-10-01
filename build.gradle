@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 group 'org.mlpj'
@@ -12,8 +13,24 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+//    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.5.0'
 }
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    testLogging {
+        outputs.upToDateWhen { false }
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+        csv.enabled false
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/jacoco.xml")
+    }
 }

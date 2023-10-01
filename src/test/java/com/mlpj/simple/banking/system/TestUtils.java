@@ -42,7 +42,7 @@ public class TestUtils {
         return interestRepo;
     }
 
-    public static InterestService getInterestService(InterestRepo interestRepo) throws IllegalAccessException {
+    public static InterestService getInterestService(InterestRepo interestRepo,TransactionsRepo transactionsRepo) throws IllegalAccessException {
         InterestService interestService = new InterestService();
 
         Field field = ReflectionUtils
@@ -52,6 +52,14 @@ public class TestUtils {
 
         field.setAccessible(true);
         field.set(interestService, interestRepo);
+
+        Field field2 = ReflectionUtils
+                .findFields(InterestService.class, f -> f.getName().equals("transactionsRepo"),
+                        ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
+                .get(0);
+
+        field2.setAccessible(true);
+        field2.set(interestService, transactionsRepo);
 
         return interestService;
     }
@@ -70,7 +78,7 @@ public class TestUtils {
         return transactionsService;
     }
 
-    public static StatementService getStatementService(TransactionsRepo transactionsRepo) throws IllegalAccessException {
+    public static StatementService getStatementService(TransactionsRepo transactionsRepo, InterestService interestService) throws IllegalAccessException {
         StatementService statementService = new StatementService();
 
         Field field = ReflectionUtils
@@ -80,6 +88,14 @@ public class TestUtils {
 
         field.setAccessible(true);
         field.set(statementService, transactionsRepo);
+
+        Field field2 = ReflectionUtils
+                .findFields(StatementService.class, f -> f.getName().equals("interestService"),
+                        ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
+                .get(0);
+
+        field2.setAccessible(true);
+        field2.set(statementService, interestService);
 
         return statementService;
     }

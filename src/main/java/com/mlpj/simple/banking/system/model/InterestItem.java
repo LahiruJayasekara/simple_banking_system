@@ -45,4 +45,8 @@ public class InterestItem {
 
         return ((InterestItem) obj).getDate().equals(date);
     }
+
+    public InterestItem clone() {
+        return new InterestItem(date, ruleId, rate);
+    }
 }

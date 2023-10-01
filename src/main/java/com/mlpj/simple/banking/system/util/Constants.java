@@ -50,6 +50,7 @@ public class Constants {
             """;
 
     public static final String STATEMENT_HEADERS_WITHOUT_BALANCE = "| Date     | Txn Id      | Type |    Amount   |";
+    public static final String STATEMENT_HEADERS_WITH_BALANCE = "| Date     | Txn Id      | Type |    Amount   |   Balance   |";
     public static final String INTEREST_STATEMENT_HEADERS = "| Date     | RuleId               | Rate(%) |";
 
     public static final String INVALID_INPUT = "Invalid input!, please check again";

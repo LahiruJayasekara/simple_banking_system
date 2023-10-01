@@ -3,9 +3,9 @@ package com.mlpj.simple.banking.system.repo;
 import com.mlpj.simple.banking.system.model.TransactionItem;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.time.YearMonth;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class TransactionsRepo {
@@ -14,6 +14,13 @@ public class TransactionsRepo {
 
     public List<TransactionItem> getTransactionsForAccount(String accountName) {
         return transactionList.stream().filter(transactionItem -> transactionItem.getAccountName().equals(accountName))
+                .toList();
+    }
+
+    public List<TransactionItem> getTransactionsForMonth(String accountName, YearMonth yearMonth) {
+        return transactionList.stream().filter(transactionItem -> transactionItem.getAccountName().equals(accountName))
+                .filter(transactionItem -> transactionItem.getDate().getYear() == yearMonth.getYear()
+                        && transactionItem.getDate().getMonth().equals(yearMonth.getMonth()))
                 .toList();
     }
 
@@ -31,6 +38,41 @@ public class TransactionsRepo {
                 .filter(transactionItem -> transactionItem.getAccountName().equals(accountName))
                 .toList();
         return transactionItems.isEmpty() ? null : transactionItems.get(transactionItems.size() - 1);
+    }
+
+    public List<TransactionItem> getTransactionListForMonthAccumulatedByDate(String accName, YearMonth yearMonth) {
+        Map<LocalDate, List<TransactionItem>> groupedByDate = transactionList.stream()
+                .filter(transactionItem -> transactionItem.getAccountName().equals(accName))
+                .filter(transactionItem -> transactionItem.getDate().getYear() == yearMonth.getYear()
+                        && transactionItem.getDate().getMonth().equals(yearMonth.getMonth()))
+                .collect(Collectors.groupingBy(TransactionItem::getDate));
+
+        return groupedByDate.values().stream()
+                .map(transactionItems -> {
+                    TransactionItem firstTransactionItem = transactionItems.get(0);
+                    TransactionItem lastTransactionItem = transactionItems.get(transactionItems.size() - 1);
+                    double aggregatedTransactionAmount = (firstTransactionItem.getTransactionType().equals(TransactionItem.TransactionType.D)
+                            ? firstTransactionItem.getAmount() : -1 * firstTransactionItem.getAmount())
+                            + lastTransactionItem.getBalance() - firstTransactionItem.getBalance();
+                    lastTransactionItem.setTransactionType(aggregatedTransactionAmount < 0 ? TransactionItem.TransactionType.W : TransactionItem.TransactionType.D);
+                    lastTransactionItem.setAmount(aggregatedTransactionAmount < 0 ? -1 * aggregatedTransactionAmount : aggregatedTransactionAmount);
+                    return lastTransactionItem;
+                })
+                .sorted(Comparator.comparing(TransactionItem::getDate))
+                .toList();
+    }
+
+    public TransactionItem getPreviousTransactionForTheMonth(String accName, YearMonth yearMonth) {
+        TransactionItem transaction = null;
+        List<TransactionItem> transactionsForAccount = getTransactionsForAccount(accName);
+        for (TransactionItem currTransaction : transactionsForAccount) {
+            if (currTransaction.getDate().getYear() == yearMonth.getYear() && currTransaction.getDate().getMonth().equals(yearMonth.getMonth())) {
+                return transaction;
+            } else {
+                transaction = currTransaction;
+            }
+        }
+        return null;
     }
 
     public void addTransaction(TransactionItem transactionItem) {

@@ -56,7 +56,9 @@ public class SimpleBankingSystemApplication {
             String interestListStatement = interestService.getInterestListStatement();
             displayOutput(interestListStatement);
         } else if (initialPromptInput.equalsIgnoreCase("P")) {
-            // todo
+            String statementInput = makeUserPrompt(RETRIEVE_PRINT_STATEMENT_PROMPT);
+            String statement = statementService.retrieveStatementForAccount(statementInput);
+            displayOutput(statement);
         } else if (initialPromptInput.equalsIgnoreCase("Q")) {
             displayOutput(Constants.THANK_YOU_MESSAGE);
             return false;

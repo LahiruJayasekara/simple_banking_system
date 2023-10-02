@@ -4,12 +4,14 @@ import com.mlpj.simple.banking.system.model.InterestItem;
 import com.mlpj.simple.banking.system.model.TransactionItem;
 import com.mlpj.simple.banking.system.repo.InterestRepo;
 import com.mlpj.simple.banking.system.repo.TransactionsRepo;
+import com.mlpj.simple.banking.system.service.InputHandler;
 import com.mlpj.simple.banking.system.service.InterestService;
 import com.mlpj.simple.banking.system.service.StatementService;
 import com.mlpj.simple.banking.system.service.TransactionsService;
 import org.junit.platform.commons.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestUtils {
@@ -98,5 +100,36 @@ public class TestUtils {
         field2.set(statementService, interestService);
 
         return statementService;
+    }
+
+    public static InputHandler getInputHandler() throws IllegalAccessException {
+        InputHandler inputHandler = new InputHandler();
+
+        Field field = ReflectionUtils
+                .findFields(InputHandler.class, f -> f.getName().equals("transactionsService"),
+                        ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
+                .get(0);
+
+        field.setAccessible(true);
+        field.set(inputHandler, getTransactionsService(getTransactionRepo(new ArrayList<>())));
+
+        Field field2 = ReflectionUtils
+                .findFields(InputHandler.class, f -> f.getName().equals("interestService"),
+                        ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
+                .get(0);
+
+        field2.setAccessible(true);
+        field2.set(inputHandler, getInterestService(getInterestRepo(new ArrayList<>()), getTransactionRepo(new ArrayList<>())));
+
+        Field field3 = ReflectionUtils
+                .findFields(InputHandler.class, f -> f.getName().equals("statementService"),
+                        ReflectionUtils.HierarchyTraversalMode.TOP_DOWN)
+                .get(0);
+
+        field3.setAccessible(true);
+        field3.set(inputHandler, getStatementService(getTransactionRepo(new ArrayList<>()),
+                getInterestService(getInterestRepo(new ArrayList<>()), getTransactionRepo(new ArrayList<>()))));
+
+        return inputHandler;
     }
 }
